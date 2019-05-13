@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".currentweather">
+    <RelativeLayout
+        android:id="@+id/SearchBarCWLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/EditTextCWCityName"
+            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:text=""
+            android:hint="Type in a city name"
+            android:layout_centerHorizontal="true"
+
+
+            />
+        <Button
+            android:id="@+id/BtnCWSearch"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/EditTextCWCityName"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Search"/>
+        <Button
+            android:layout_marginTop="5dp"
+            android:layout_toLeftOf="@id/EditTextCWCityName"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Current Location"
+            android:id="@+id/BtnCWGps"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/LayoutCWWeatherData"
+        android:layout_below="@id/SearchBarCWLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:visibility="visible"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/TextViewCWWeatherData"/>
+
+        </ScrollView>
+
+    </RelativeLayout>
+
+</RelativeLayout>
