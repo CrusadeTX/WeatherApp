@@ -1,6 +1,14 @@
 package com.example.weatherapp;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -45,13 +53,26 @@ public class fivedayforecast extends AppCompatActivity {
 
             }
         });
+        btnGPSFD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //requestCoarseLocationPermission();
+                requestFineLocationPermission();
+                LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+                @SuppressLint("MissingPermission") Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                String longitude = Double.toString(location.getLongitude());
+                String latitude = Double.toString(location.getLatitude());
+                updateWeatherDataWithCoordinates(longitude,latitude,weatherDataFD);
+
+            }
+        });
 
     }
     private void updateWeatherData(final String city, final TextView textView) {
         new Thread() {
             public void run() {
-                final JSONObject jsonfd = ApiDataAccess.getJSON(city,true);
-                dataBaseDataAccess.addData(ApiDataAccess.BuildAPIQuery(true,city));
+                final JSONObject jsonfd = ApiDataAccess.getJSON(city,true,null,null);
+                dataBaseDataAccess.addData(ApiDataAccess.BuildAPIQuery(true,city,null,null));
                 if (jsonfd == null) {
 
 
@@ -71,6 +92,37 @@ public class fivedayforecast extends AppCompatActivity {
                             textView.setVisibility(View.VISIBLE);
                             SetText(jsonfd,textView);
 
+                        }
+                    });
+
+
+                }
+            }
+        }.start();
+    }
+    private void updateWeatherDataWithCoordinates(final String longtitude,final String latitude, final TextView textView) {
+        new Thread() {
+            public void run() {
+                final JSONObject json = ApiDataAccess.getJSON(null,true,latitude,longtitude);
+                dataBaseDataAccess.addData(ApiDataAccess.BuildAPIQuery(true,null,longtitude,latitude));
+                if (json == null) {
+
+
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),"JSON IS NULL",Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            textView.setVisibility(View.VISIBLE);
+                            SetText(json,textView);
                         }
                     });
 
@@ -107,6 +159,24 @@ public class fivedayforecast extends AppCompatActivity {
             Log.e("SimpleWeather", "One or more fields not found in the JSON data");
         }
 
+    }
+    public void requestFineLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED
+        ) {
+            return;
+
+        }
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+        )) {
+
+        }
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                123
+
+        );
     }
 
 }

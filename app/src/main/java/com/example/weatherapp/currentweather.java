@@ -1,8 +1,12 @@
 package com.example.weatherapp;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
@@ -52,13 +56,57 @@ public class currentweather extends AppCompatActivity {
 
            }
        });
+       btnGPS.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               //requestCoarseLocationPermission();
+               requestFineLocationPermission();
+               LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+               @SuppressLint("MissingPermission") Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+               String longitude = Double.toString(location.getLongitude());
+               String latitude = Double.toString(location.getLatitude());
+               updateWeatherDataWithCoordinates(longitude,latitude,weatherData);
+
+           }
+       });
 
     }
     private void updateWeatherData(final String city, final TextView textView) {
         new Thread() {
             public void run() {
-                final JSONObject json = ApiDataAccess.getJSON(city,false);
-                dataBaseDataAccess.addData(ApiDataAccess.BuildAPIQuery(false,city));
+                final JSONObject json = ApiDataAccess.getJSON(city,false,null,null);
+                dataBaseDataAccess.addData(ApiDataAccess.BuildAPIQuery(false,city,null,null));
+                if (json == null) {
+
+
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),"JSON IS NULL",Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            textView.setVisibility(View.VISIBLE);
+                            SetText(json,textView);
+                        }
+                    });
+
+
+                }
+            }
+        }.start();
+    }
+    private void updateWeatherDataWithCoordinates(final String longtitude,final String latitude, final TextView textView) {
+        new Thread() {
+            public void run() {
+                final JSONObject json = ApiDataAccess.getJSON(null,false,latitude,longtitude);
+                dataBaseDataAccess.addData(ApiDataAccess.BuildAPIQuery(false,null,longtitude,latitude));
                 if (json == null) {
 
 
@@ -107,6 +155,42 @@ public class currentweather extends AppCompatActivity {
             Log.e("SimpleWeather", "One or more fields not found in the JSON data");
         }
 
+    }
+    public void requestFineLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED
+        ) {
+            return;
+
+        }
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+        )) {
+
+        }
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                123
+
+        );
+    }
+    public void requestCoarseLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED
+        ) {
+            return;
+
+        }
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+        )) {
+
+        }
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                456
+
+        );
     }
 
 }
