@@ -6,15 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".fivedayforecast">
     <RelativeLayout
-        android:id="@+id/SearchBarLayout"
+        android:id="@+id/SearchBarFDLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/EditTextCityName"
+            android:id="@+id/EditTextFDCityName"
             android:layout_marginTop="20dp"
             android:layout_width="wrap_content"
-            android:layout_height="25dp"
+            android:layout_height="75dp"
             android:text=""
             android:hint="Type in a city name"
             android:layout_centerHorizontal="true"
@@ -22,34 +22,41 @@
 
             />
         <Button
-            android:id="@+id/btnSearch"
+            android:id="@+id/BtnFDSearch"
             android:layout_marginTop="5dp"
-            android:layout_toRightOf="@id/EditTextCityName"
+            android:layout_toRightOf="@id/EditTextFDCityName"
             android:layout_marginLeft="20dp"
             android:layout_marginBottom="10dp"
             android:layout_centerHorizontal="true"
             android:layout_width="100dp"
-            android:layout_height="75dp"
+            android:layout_height="wrap_content"
             android:text="Search"/>
         <Button
-            android:id="@+id/btnGps"
             android:layout_marginTop="5dp"
-            android:layout_toLeftOf="@id/EditTextCityName"
+            android:layout_toLeftOf="@id/EditTextFDCityName"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="10dp"
             android:layout_centerHorizontal="true"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="Current Location"/>
+            android:text="Current Location"
+            android:id="@+id/BtnFDGps"/>
     </RelativeLayout>
     <RelativeLayout
-        android:visibility="invisible"
-        android:layout_below="@id/SearchBarLayout"
+        android:id="@+id/LayoutFDWeatherData"
+        android:layout_below="@id/SearchBarFDLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+            <TextView
+                android:visibility="visible"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/TextViewFDWeatherData"/>
 
         </ScrollView>
 

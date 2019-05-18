@@ -9,12 +9,14 @@ import android.widget.Button;
 public class MainActivity extends AppCompatActivity {
     Button btnCurrentWeather;
     Button btnFiveDayForecast;
+    Button btnSearchHistory;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btnCurrentWeather = findViewById(R.id.BtnCurrentWeather);
         btnFiveDayForecast = findViewById(R.id.BtnFiveDayForecast);
+        btnSearchHistory = findViewById(R.id.BtnSearchHistory);
         btnCurrentWeather.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -27,6 +29,12 @@ public class MainActivity extends AppCompatActivity {
                 openFiveDayForecastActivity();
             }
         });
+        btnSearchHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openSearchHistoryActivity();
+            }
+        });
     }
     public void openCurrentWeatherActivity(){
         Intent intent = new Intent(this,currentweather.class);
@@ -34,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
     }
     public void openFiveDayForecastActivity(){
         Intent intent = new Intent(this,fivedayforecast.class);
+        startActivity(intent);
+    }
+    public void openSearchHistoryActivity(){
+        Intent intent = new Intent(this,SearchHistory.class);
         startActivity(intent);
     }
 }

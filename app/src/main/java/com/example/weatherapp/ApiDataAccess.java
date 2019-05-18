@@ -15,12 +15,13 @@ import javax.microedition.khronos.egl.EGLContext;
 
 public class ApiDataAccess {
     public static String Error = null;
-    public static JSONObject jsono;
+    public static String Exception = null;
+    //public static JSONObject jsono;
     private static final String API_KEY = "6fa92478ca54c09396ee514c752cec16";
     public static String BuildAPIQuery(Boolean isForecast, String cityName)
 
     {
-        String query = "api.openweathermap.org/data/2.5/";
+        String query = "http://api.openweathermap.org/data/2.5/";
         if (isForecast)
         {
             query+="forecast";
@@ -39,7 +40,7 @@ public class ApiDataAccess {
         HttpURLConnection connection = null;
         try {
             //Create connection
-            url = new URL(BuildAPIQuery(false,city));
+            url = new URL(BuildAPIQuery(isForecast,city));
             connection = (HttpURLConnection)url.openConnection();
             connection.setUseCaches (false);
             connection.setDoInput(true);
@@ -66,10 +67,11 @@ public class ApiDataAccess {
             }
             rd.close();
             JSONObject json = new JSONObject(response.toString());
-            jsono=json;
+          //  jsono=json;
             return json;
         } catch (Exception e) {
-            return null;
+             Exception = e.getLocalizedMessage().toString();
+             return null;
         } finally {
             if(connection != null) {
                 connection.disconnect();

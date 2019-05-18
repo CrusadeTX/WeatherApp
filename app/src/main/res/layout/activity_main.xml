@@ -20,6 +20,14 @@
         android:text="5 Day Forecast"
         android:layout_above="@+id/BtnCurrentWeather"
         android:layout_centerHorizontal="true"/>
+    <Button
+
+        android:id="@+id/BtnSearchHistory"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:text="5 Day Forecast"
+        android:layout_below="@+id/BtnCurrentWeather"
+        android:layout_centerHorizontal="true"/>
 
 
 </RelativeLayout>

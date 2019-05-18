@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Locale;
@@ -26,12 +27,13 @@ public class currentweather extends AppCompatActivity {
     Button btnGPS;
     TextView weatherData;
     EditText cityName;
-    Handler handler = new Handler();
+    DataBaseDataAccess dataBaseDataAccess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_currentweather);
+        dataBaseDataAccess = new DataBaseDataAccess(this);
        cityName = (EditText) findViewById(R.id.EditTextCWCityName);
        weatherData=(TextView) findViewById(R.id.TextViewCWWeatherData);
        btnGPS = (Button) findViewById(R.id.BtnCWGps);
@@ -40,14 +42,13 @@ public class currentweather extends AppCompatActivity {
            @Override
            public void onClick(View v) {
                weatherData.setVisibility(View.VISIBLE);
-               String name = (String)cityName.getText().toString();
+               String name = cityName.getText().toString();
                 updateWeatherData(name.trim(),weatherData);
-                if (ApiDataAccess.Error == null) {
-                }
-                else{
-                    weatherData.setText(ApiDataAccess.Error);
 
-                }
+               //btnGPS.setText(ApiDataAccess.Error);
+               if(ApiDataAccess.Exception!=null)
+               Toast.makeText(getApplicationContext(),ApiDataAccess.Exception,Toast.LENGTH_LONG).show();
+
 
            }
        });
@@ -57,6 +58,7 @@ public class currentweather extends AppCompatActivity {
         new Thread() {
             public void run() {
                 final JSONObject json = ApiDataAccess.getJSON(city,false);
+                dataBaseDataAccess.addData(ApiDataAccess.BuildAPIQuery(false,city));
                 if (json == null) {
 
 
@@ -87,10 +89,17 @@ public class currentweather extends AppCompatActivity {
 
         private void SetText(JSONObject json, TextView textView){
         try {
+            JSONObject weather = json.getJSONArray("weather").getJSONObject(0);
+            JSONObject main = json.getJSONObject("main");
+            JSONObject sys = json.getJSONObject("sys");
+            JSONObject wind = json.getJSONObject("wind");
+
 
             textView.setText(json.getString("name").toUpperCase(Locale.US) +
                     ", " +
-                    json.getJSONObject("sys").getString("country"));
+                    sys.getString("country") + " Sunrise: "+ sys.getString("sunrise") + " Sunset: "+
+                    sys.getString("sunset") + " weather: "+ weather.getString("description")+", Current Temp "+ main.getString("temp") +" degrees, minTemp: "
+                    + main.getString("temp_min")+" degrees, maxTemp: " + main.getString("temp_max") + "degrees, WindSpeed"+ wind.getString("speed"));
 
 
 
