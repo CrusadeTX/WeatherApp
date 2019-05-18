@@ -31,7 +31,7 @@ public class ApiDataAccess {
             query+="weather";
         }
 
-        query+="?q="+cityName+"&APPID="+API_KEY;
+        query+="?q="+cityName+"&APPID="+API_KEY+"&units=metric";
         return query;
     }
 
