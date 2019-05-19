@@ -34,6 +34,7 @@ public class fivedayforecast extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fivedayforecast);
+        requestFineLocationPermission();
         dataBaseDataAccess = new DataBaseDataAccess(this);
         cityNameFD = (EditText) findViewById(R.id.EditTextFDCityName);
         weatherDataFD=(TextView) findViewById(R.id.TextViewFDWeatherData);
@@ -62,12 +63,20 @@ public class fivedayforecast extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //requestCoarseLocationPermission();
-                requestFineLocationPermission();
-                LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-                @SuppressLint("MissingPermission") Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                String longitude = Double.toString(location.getLongitude());
-                String latitude = Double.toString(location.getLatitude());
-                updateWeatherDataWithCoordinates(longitude,latitude,weatherDataFD);
+
+                if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                        Manifest.permission.ACCESS_FINE_LOCATION) ==
+                        PackageManager.PERMISSION_GRANTED) {
+
+                    LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                    Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    String longitude = Double.toString(location.getLongitude());
+                    String latitude = Double.toString(location.getLatitude());
+                    updateWeatherDataWithCoordinates(longitude, latitude, weatherDataFD);
+                }
+                else{
+                    requestFineLocationPermission();
+                }
 
             }
         });
@@ -161,7 +170,8 @@ public class fivedayforecast extends AppCompatActivity {
             }
             textView.setText(text);
         }catch(Exception e){
-            Log.e("SimpleWeather", "One or more fields not found in the JSON data");
+            Log.e("fivedayforecast", "No such name exists");
+            Toast.makeText(getApplicationContext(),"City name doesnt exist",Toast.LENGTH_LONG).show();
         }
 
     }

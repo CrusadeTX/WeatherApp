@@ -38,6 +38,7 @@ public class currentweather extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_currentweather);
         dataBaseDataAccess = new DataBaseDataAccess(this);
+        requestFineLocationPermission();
        cityName = (EditText) findViewById(R.id.EditTextCWCityName);
        weatherData=(TextView) findViewById(R.id.TextViewCWWeatherData);
        btnGPS = (Button) findViewById(R.id.BtnCWGps);
@@ -66,12 +67,19 @@ public class currentweather extends AppCompatActivity {
            @Override
            public void onClick(View v) {
                //requestCoarseLocationPermission();
-               requestFineLocationPermission();
-               LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-               @SuppressLint("MissingPermission") Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-               String longitude = Double.toString(location.getLongitude());
-               String latitude = Double.toString(location.getLatitude());
-               updateWeatherDataWithCoordinates(longitude,latitude,weatherData);
+               if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                       Manifest.permission.ACCESS_FINE_LOCATION) ==
+                       PackageManager.PERMISSION_GRANTED) {
+                   LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                   Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                   String longitude = Double.toString(location.getLongitude());
+                   String latitude = Double.toString(location.getLatitude());
+                   updateWeatherDataWithCoordinates(longitude, latitude, weatherData);
+               }
+               else
+                   {
+                       requestFineLocationPermission();
+                   }
 
            }
        });
@@ -158,7 +166,8 @@ public class currentweather extends AppCompatActivity {
 
 
         }catch(Exception e){
-            Log.e("SimpleWeather", "One or more fields not found in the JSON data");
+            Log.e("currentweather", "No such name exists");
+            Toast.makeText(getApplicationContext(),"City name doesnt exist",Toast.LENGTH_LONG).show();
         }
 
     }
