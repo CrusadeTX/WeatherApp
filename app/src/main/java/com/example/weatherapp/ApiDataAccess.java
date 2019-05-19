@@ -31,7 +31,7 @@ public class ApiDataAccess {
         {
             query+="weather";
         }
-        if(longtitude.equals(null) || latitude.equals(null)) {
+        if(longtitude==null || latitude==null) {
             query += "?q=" + cityName + "&APPID=" + API_KEY + "&units=metric";
         }
         else{
@@ -45,7 +45,7 @@ public class ApiDataAccess {
         HttpURLConnection connection = null;
         try {
             //Create connection
-            if(lattitude.equals(null) || longtitude.equals(null)) {
+            if(lattitude==null || longtitude==null) {
                 url = new URL(BuildAPIQuery(isForecast, city, null, null));
             }
             else{

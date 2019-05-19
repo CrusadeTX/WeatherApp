@@ -45,13 +45,19 @@ public class currentweather extends AppCompatActivity {
        btnSearch.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               weatherData.setVisibility(View.VISIBLE);
-               String name = cityName.getText().toString();
-                updateWeatherData(name.trim(),weatherData);
+               String name = cityName.getText().toString().trim();
+               if (name.length()>0) {
+                   weatherData.setVisibility(View.VISIBLE);
 
-               //btnGPS.setText(ApiDataAccess.Error);
-               if(ApiDataAccess.Exception!=null)
-               Toast.makeText(getApplicationContext(),ApiDataAccess.Exception,Toast.LENGTH_LONG).show();
+                   updateWeatherData(name, weatherData);
+
+                   //btnGPS.setText(ApiDataAccess.Error);
+                   if (ApiDataAccess.Exception != null)
+                       Toast.makeText(getApplicationContext(), ApiDataAccess.Exception, Toast.LENGTH_LONG).show();
+               }
+               else{
+                   Toast.makeText(getApplicationContext(),"Please enter a city name!",Toast.LENGTH_LONG).show();
+               }
 
 
            }
@@ -145,9 +151,9 @@ public class currentweather extends AppCompatActivity {
 
             textView.setText(json.getString("name").toUpperCase(Locale.US) +
                     ", " +
-                    sys.getString("country") + " Sunrise: "+ sys.getString("sunrise") + " Sunset: "+
-                    sys.getString("sunset") + " weather: "+ weather.getString("description")+", Current Temp "+ main.getString("temp") +" degrees, minTemp: "
-                    + main.getString("temp_min")+" degrees, maxTemp: " + main.getString("temp_max") + "degrees, WindSpeed"+ wind.getString("speed"));
+                    sys.getString("country") + "\n Sunrise: "+ sys.getString("sunrise") + "\n Sunset: "+
+                    sys.getString("sunset") + "\n weather: "+ weather.getString("description")+"\n Current Temp "+ main.getString("temp") +" degrees\n minTemp: "
+                    + main.getString("temp_min")+" degrees\n maxTemp: " + main.getString("temp_max") + "degrees\n Wind speed"+ wind.getString("speed"));
 
 
 

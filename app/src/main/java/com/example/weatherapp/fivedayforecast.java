@@ -42,13 +42,18 @@ public class fivedayforecast extends AppCompatActivity {
         btnSearchFD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                weatherDataFD.setVisibility(View.VISIBLE);
-                String name = cityNameFD.getText().toString();
-                updateWeatherData(name.trim(),weatherDataFD);
-                //btnGPS.setText(ApiDataAccess.Error);
-              //  Toast.makeText(getApplicationContext(),query,Toast.LENGTH_LONG).show();
-                if(ApiDataAccess.Exception!=null)
-                Toast.makeText(getApplicationContext(),ApiDataAccess.Exception,Toast.LENGTH_LONG).show();
+                String name = cityNameFD.getText().toString().trim();
+                if(name.length()>0) {
+                    weatherDataFD.setVisibility(View.VISIBLE);
+                    updateWeatherData(name, weatherDataFD);
+                    //btnGPS.setText(ApiDataAccess.Error);
+                    //  Toast.makeText(getApplicationContext(),query,Toast.LENGTH_LONG).show();
+                    if (ApiDataAccess.Exception != null)
+                        Toast.makeText(getApplicationContext(), ApiDataAccess.Exception, Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),"Please enter a city name!",Toast.LENGTH_LONG).show();
+                }
 
 
             }
@@ -152,7 +157,7 @@ public class fivedayforecast extends AppCompatActivity {
                       JSONObject wind = row.getJSONObject("wind");
                       String date = row.getString("dt_txt");
                     text+= "\nDate: "+ date +"\nweather: "+ weather.getString("description")+"\n Current Temp "+ main.getString("temp") +" degrees\n minTemp: "
-                            + main.getString("temp_min")+" degrees \n maxTemp: " + main.getString("temp_max") + "degrees\n WindSpeed"+ wind.getString("speed")+" \n";
+                            + main.getString("temp_min")+" degrees \n maxTemp: " + main.getString("temp_max") + "degrees\n Wind speed"+ wind.getString("speed")+" \n";
             }
             textView.setText(text);
         }catch(Exception e){

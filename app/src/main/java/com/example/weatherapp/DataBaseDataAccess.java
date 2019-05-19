@@ -51,9 +51,11 @@ import android.util.Log;
             //if date as inserted incorrectly it will return -1
             if (result == -1) {
                 return false;
+
             } else {
                 return true;
             }
+
         }
 
         /**
@@ -87,6 +89,7 @@ import android.util.Log;
          * @param oldName
          */
         public void updateName(String newName, int id, String oldName){
+
             SQLiteDatabase db = this.getWritableDatabase();
             String query = "UPDATE " + TABLE_NAME + " SET " + COL2 +
                     " = '" + newName + "' WHERE " + COL1 + " = '" + id + "'" +
