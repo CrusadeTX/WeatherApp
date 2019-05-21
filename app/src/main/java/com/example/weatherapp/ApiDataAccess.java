@@ -44,7 +44,6 @@ public class ApiDataAccess {
         URL url;
         HttpURLConnection connection = null;
         try {
-            //Create connection
             if(lattitude==null || longtitude==null) {
                 url = new URL(BuildAPIQuery(isForecast, city, null, null));
             }

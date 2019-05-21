@@ -9,9 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-    /**
-     * Created by User on 2/28/2017.
-     */
 
     public class DataBaseDataAccess extends SQLiteOpenHelper {
 
@@ -69,50 +66,8 @@ import android.util.Log;
             return data;
         }
 
-        /**
-         * Returns only the ID that matches the name passed in
-         * @param name
-         * @return
-         */
-        public Cursor getItemID(String name){
-            SQLiteDatabase db = this.getWritableDatabase();
-            String query = "SELECT " + COL1 + " FROM " + TABLE_NAME +
-                    " WHERE " + COL2 + " = '" + name + "'";
-            Cursor data = db.rawQuery(query, null);
-            return data;
-        }
 
-        /**
-         * Updates the name field
-         * @param newName
-         * @param id
-         * @param oldName
-         */
-        public void updateName(String newName, int id, String oldName){
 
-            SQLiteDatabase db = this.getWritableDatabase();
-            String query = "UPDATE " + TABLE_NAME + " SET " + COL2 +
-                    " = '" + newName + "' WHERE " + COL1 + " = '" + id + "'" +
-                    " AND " + COL2 + " = '" + oldName + "'";
-            Log.d(TAG, "updateName: query: " + query);
-            Log.d(TAG, "updateName: Setting name to " + newName);
-            db.execSQL(query);
-        }
-
-        /**
-         * Delete from database
-         * @param id
-         * @param name
-         */
-        public void deleteName(int id, String name){
-            SQLiteDatabase db = this.getWritableDatabase();
-            String query = "DELETE FROM " + TABLE_NAME + " WHERE "
-                    + COL1 + " = '" + id + "'" +
-                    " AND " + COL2 + " = '" + name + "'";
-            Log.d(TAG, "deleteName: query: " + query);
-            Log.d(TAG, "deleteName: Deleting " + name + " from database.");
-            db.execSQL(query);
-        }
 
     }
 

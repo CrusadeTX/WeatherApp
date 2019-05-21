@@ -120,7 +120,10 @@ public class currentweather extends AppCompatActivity {
         new Thread() {
             public void run() {
                 final JSONObject json = ApiDataAccess.getJSON(null,false,latitude,longtitude);
-                dataBaseDataAccess.addData(ApiDataAccess.BuildAPIQuery(false,null,longtitude,latitude));
+               boolean result = dataBaseDataAccess.addData(ApiDataAccess.BuildAPIQuery(false,null,longtitude,latitude));
+               if(!result){
+                   Toast.makeText(getApplicationContext(),"Error adding data to the database",Toast.LENGTH_LONG);
+               }
                 if (json == null) {
 
 
